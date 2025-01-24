@@ -1,41 +1,29 @@
-import { Component,Input } from '@angular/core';
-import { TaskComponent } from './task/task.component';
-import {dummyTasks} from '../dummy-tasks'
-import { NewTaskComponent } from './new-task/new-task.component';
-import {type NewTaskData } from './task/task.modal';
+import { Component, Input } from '@angular/core';
+
+import { TasksService } from './tasks.service';
+
 @Component({
   selector: 'app-tasks',
-  standalone:true,
-  imports: [TaskComponent,NewTaskComponent],
+  standalone:false,
   templateUrl: './tasks.component.html',
-  styleUrl: './tasks.component.css'
+  styleUrl: './tasks.component.css',
 })
 export class TasksComponent {
-  @Input({required:true}) userId!:string;
- @Input({required:true}) name!:string;
- isAddingTask:boolean = false;
- 
- tasks= dummyTasks
+  @Input({ required: true }) userId!: string;
+  @Input({ required: true }) name!: string;
+  isAddingTask = false;
 
- get selectedUserTasks(){
-   return this.tasks.filter((task)=> task.userId === this.userId)
- }
- 
- onCompleteTask(id: string){
- 
- }
+  constructor(private tasksService: TasksService) {}
 
- onStartAddTask(){
-     this.isAddingTask = true
- }
+  get selectedUserTasks() {
+    return this.tasksService.getUserTask(this.userId);
+  }
 
- onCancelAddTask(){
-  this.isAddingTask = false
- }
+  onStartAddTask() {
+    this.isAddingTask = true;
+  }
 
- onAddTask(taskData:NewTaskData){
-    
-     this.isAddingTask = false
- }
+  onCloseAddTask() {
+    this.isAddingTask = false;
+  }
 }
-
